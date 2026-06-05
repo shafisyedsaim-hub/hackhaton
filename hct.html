@@ -1,0 +1,2835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSU Lost & Found Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ===================== PRODUCTION DESIGN SYSTEM & VARIABLES ===================== */
+:root {
+  --maroon: #7A1C1C;
+  --maroon-dark: #5C1313;
+  --maroon-light: #F9F1F1;
+  --orange: #E06616;
+  --orange-dark: #B8500E;
+  --orange-light: #FFF6F0;
+  --green: #147D4E;
+  --green-light: #EEF9F3;
+  --blue: #1C64B4;
+  --blue-light: #F0F6FC;
+  --text-dark: #1E293B;
+  --text-main: #334155;
+  --text-light: #64748B;
+  --text-muted: #94A3B8;
+  --bg-main: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --border: #E2E8F0;
+  --border-focus: #CBD5E1;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+}
+
+/* ===================== GLOBAL CORE REUSABLE UI ELEMENTS ===================== */
+.page {
+  display: none;
+  min-height: calc(100vh - 72px);
+}
+.page.active {
+  display: block;
+}
+
+/* Base Buttons with Enhanced Modern Physics and Smooth Hover States */
+button {
+  font-family: var(--font-sans);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary {
+  background-color: var(--maroon);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover {
+  background-color: var(--maroon-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--text-main);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-outline:hover {
+  background-color: var(--bg-main);
+  border-color: var(--text-muted);
+  transform: translateY(-1px);
+}
+
+.btn-maroon {
+  background-color: var(--maroon);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 28px;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-maroon:hover {
+  background-color: var(--maroon-dark);
+  transform: translateY(-1px);
+}
+
+/* ===================== SUCCESS DIALOG MODAL ===================== */
+#successModal {
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+}
+
+/* ===================== PUBLIC SITE NAVIGATION TOP-BAR ===================== */
+.top-navbar {
+  height: 72px;
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow-sm);
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar-brand .logo-icon-svg {
+  width: 34px;
+  height: 34px;
+  color: var(--maroon);
+}
+
+.navbar-brand span {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text-dark);
+  display: block;
+  letter-spacing: -0.02em;
+}
+
+.navbar-brand small {
+  font-size: 12px;
+  color: var(--text-light);
+  display: block;
+  margin-top: -1px;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navbar-links a {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-light);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+}
+
+.navbar-links a:hover {
+  color: var(--maroon);
+  background-color: var(--maroon-light);
+}
+
+.navbar-links a.active {
+  color: var(--maroon);
+  background-color: var(--maroon-light);
+  font-weight: 600;
+}
+
+.navbar-links .admin-link {
+  border: 1px solid var(--border);
+  margin-left: 8px;
+  font-weight: 600;
+}
+.navbar-links .admin-link:hover {
+  border-color: var(--maroon);
+}
+
+/* ===================== HOME PAGE SPECIFIC STYLING ===================== */
+.hero {
+  background: radial-gradient(circle at 80% 20%, var(--maroon-light) 0%, transparent 50%), linear-gradient(180deg, #FFFFFF 0%, var(--bg-main) 100%);
+  padding: 80px 40px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 16px;
+  color: var(--text-light);
+  max-width: 640px;
+  margin: 0 auto 32px auto;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-item {
+  padding: 32px;
+  text-align: center;
+  border-right: 1px solid var(--border);
+}
+.stat-item:last-child {
+  border-right: none;
+}
+
+.stat-number {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--maroon);
+  display: block;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+.stat-number.orange {
+  color: var(--orange);
+}
+
+.stat-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.section {
+  padding: 80px 40px;
+}
+
+.section-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-dark);
+  text-align: center;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.section-sub {
+  font-size: 15px;
+  color: var(--text-light);
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+/* Steps Grid Styling */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.step-card {
+  background-color: var(--bg-card);
+  padding: 40px 32px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.step-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.step-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.step-icon.maroon {
+  background-color: var(--maroon-light);
+  color: var(--maroon);
+}
+.step-icon.orange {
+  background-color: var(--orange-light);
+  color: var(--orange);
+}
+.step-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.step-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+}
+
+.step-card p {
+  font-size: 14px;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+/* Standardized Dynamic Grid for Core Items Display */
+.items-grid, .search-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.search-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Polished Card Designs with Geometric Abstract Premium SVGs */
+.item-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.item-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-focus);
+}
+
+.item-img {
+  position: relative;
+  height: 180px;
+  background-color: #EDF2F7;
+  overflow: hidden;
+}
+
+/* CSS-driven Geometric Abstract Pattern Fills replacing standard emojis */
+.img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  background-size: 20px 20px;
+  background-image: linear-gradient(to right, rgba(0,0,0,0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
+}
+
+.img-placeholder svg {
+  width: 48px;
+  height: 48px;
+  color: var(--text-light);
+  opacity: 0.6;
+}
+
+.item-status-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 10;
+}
+
+.badge-lost, .badge-found, .badge-matched, .badge-claimed, .status-badge {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 50px;
+  display: inline-block;
+}
+
+.badge-lost {
+  background-color: #FEE2E2;
+  color: #991B1B;
+}
+
+.badge-found {
+  background-color: var(--orange-light);
+  color: var(--orange-dark);
+}
+
+.badge-matched {
+  background-color: var(--blue-light);
+  color: var(--blue);
+}
+
+.badge-claimed {
+  background-color: var(--green-light);
+  color: var(--green);
+}
+
+.item-body {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.item-category {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.item-category svg {
+  width: 12px;
+  height: 12px;
+}
+
+.item-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+}
+
+.item-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.item-meta span {
+  font-size: 13px;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.item-meta svg {
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+}
+
+.view-details {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--maroon);
+  background-color: var(--bg-card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.2s;
+}
+.item-card:hover .view-details {
+  background-color: var(--maroon-light);
+}
+
+/* ===================== STRUCTURAL SYSTEM REUSABLE FORM PAGES ===================== */
+.form-page {
+  background-color: var(--bg-main);
+  padding: 60px 40px;
+}
+
+.form-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.form-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.form-card-header {
+  background-color: var(--maroon-light);
+  padding: 32px 40px;
+  border-bottom: 1px solid var(--border);
+}
+.form-card-header.orange {
+  background-color: var(--orange-light);
+}
+
+.form-card-header h2 {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.form-card-header h2 svg {
+  width: 24px;
+  height: 24px;
+}
+.form-card-header h2.orange-title {
+  color: var(--orange-dark);
+}
+
+.form-card-header p {
+  font-size: 14px;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+
+.form-body {
+  padding: 40px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.form-group .req {
+  color: #DC2626;
+  margin-left: 2px;
+}
+
+/* Native Control Refinements with Micro Interactive Indicators */
+.form-control {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text-main);
+  padding: 10px 14px;
+  background-color: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: all 0.2s;
+}
+
+.form-control:focus {
+  border-color: var(--maroon);
+  box-shadow: 0 0 0 3px rgba(122, 28, 28, 0.1);
+}
+
+select.form-control {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748B' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+textarea.form-control {
+  resize: vertical;
+}
+
+/* Upload Interface Refinements */
+.upload-area {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  text-align: center;
+  background-color: var(--bg-main);
+  position: relative;
+  transition: all 0.2s;
+}
+.upload-area:hover {
+  border-color: var(--maroon);
+  background-color: var(--maroon-light);
+}
+
+.upload-area input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.upload-icon {
+  color: var(--text-light);
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+}
+.upload-icon svg {
+  width: 36px;
+  height: 36px;
+}
+
+.upload-area h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.upload-area p {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.upload-preview {
+  display: none;
+  margin-top: 16px;
+  padding: 12px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  align-items: center;
+  gap: 16px;
+}
+
+.preview-img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.preview-info {
+  flex-grow: 1;
+}
+.preview-info span {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+.preview-info small {
+  font-size: 11px;
+  color: var(--green);
+}
+
+.submit-btn {
+  width: 100%;
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-top: 12px;
+}
+.submit-btn.maroon { background-color: var(--maroon); }
+.submit-btn.maroon:hover { background-color: var(--maroon-dark); }
+.submit-btn.orange { background-color: var(--orange); }
+.submit-btn.orange:hover { background-color: var(--orange-dark); }
+
+/* Contextual Guidelines Cards Components */
+.guidelines-card {
+  background-color: var(--bg-card);
+  padding: 32px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 112px;
+}
+
+.guidelines-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.guidelines-card h3 svg {
+  width: 18px;
+  height: 18px;
+  color: var(--maroon);
+}
+
+.guideline-item {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.guideline-item .g-icon {
+  color: var(--text-light);
+  flex-shrink: 0;
+}
+.guideline-item .g-icon svg {
+  width: 18px;
+  height: 18px;
+  color: var(--text-light);
+}
+
+.guideline-item p {
+  font-size: 13px;
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+.quick-links {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.quick-links h4 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.quick-links a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 10px;
+}
+.quick-links a:hover {
+  color: var(--maroon);
+}
+.quick-links a svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ===================== FILTER IMPLEMENTATION BAR ===================== */
+.search-header {
+  background-color: var(--bg-card);
+  padding: 48px 40px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.search-header h1 {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-dark);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.search-header p {
+  font-size: 15px;
+  color: var(--text-light);
+}
+
+.filter-bar {
+  max-width: 1200px;
+  margin: -28px auto 40px auto;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  padding: 20px 32px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) auto;
+  gap: 20px;
+  align-items: flex-end;
+  position: relative;
+  z-index: 20;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-group label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.search-results {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px 80px 40px;
+}
+
+.results-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.results-meta span {
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+.sort-select {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+  border: 1px solid var(--border);
+  background-color: var(--bg-card);
+  padding: 6px 32px 6px 12px;
+  border-radius: var(--radius-sm);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748B' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 14px;
+}
+
+/* ===================== DETAILED VIEWS INTERFACES ===================== */
+.detail-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px;
+}
+
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text-light);
+  margin-bottom: 24px;
+}
+.breadcrumb a {
+  color: var(--maroon);
+  font-weight: 500;
+}
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.detail-content {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 48px;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  padding: 40px;
+  margin-bottom: 48px;
+}
+
+.detail-images .main-img {
+  width: 100%;
+  border: 1px solid var(--border);
+  background-color: #EDF2F7;
+  background-size: 30px 30px;
+  background-image: linear-gradient(to right, rgba(0,0,0,0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
+}
+
+.detail-images .main-img svg {
+  width: 96px;
+  height: 96px;
+  color: var(--text-light);
+  opacity: 0.5;
+}
+
+.thumb-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.thumb {
+  height: 80px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.thumb:hover, .thumb.active {
+  border-color: var(--maroon);
+}
+.thumb svg {
+  width: 24px;
+  height: 24px;
+  color: var(--text-light);
+  opacity: 0.6;
+}
+
+.detail-info h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-dark);
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+
+.info-section {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.info-section:last-of-type {
+  border-bottom: none;
+}
+
+.info-section h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 14px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 24px;
+}
+
+.info-item label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-light);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.info-item span {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.detail-desc {
+  font-size: 14px;
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.matches-section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.matches-section h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 20px;
+}
+
+.matches-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.match-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+.match-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.match-img div {
+  background-color: #EDF2F7 !important;
+  background-size: 16px 16px;
+  background-image: linear-gradient(to right, rgba(0,0,0,0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
+}
+.match-img svg {
+  width: 32px;
+  height: 32px;
+  color: var(--text-light);
+  opacity: 0.5;
+}
+
+.match-body {
+  padding: 16px;
+}
+
+.match-body h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 6px 0 2px 0;
+}
+
+.match-body p {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.match-percent {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green);
+  margin-top: 8px;
+}
+
+/* ===================== RECORDS GENERAL TABULAR COMPONENT ===================== */
+.records-header {
+  background-color: var(--bg-card);
+  padding: 48px 40px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.records-header h1 {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.records-header h1 svg {
+  width: 32px;
+  height: 32px;
+  color: var(--maroon);
+}
+
+.records-header p {
+  font-size: 15px;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+.records-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 32px 0 24px 0;
+}
+
+.tab-btn {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-light);
+  border-radius: 50px;
+}
+.tab-btn:hover {
+  border-color: var(--text-muted);
+  color: var(--text-dark);
+}
+.tab-btn.active {
+  background-color: var(--maroon);
+  color: white;
+  border-color: var(--maroon);
+}
+
+.records-toolbar {
+  max-width: 1200px;
+  margin: 0 auto 16px auto;
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-input-wrap {
+  position: relative;
+}
+
+.search-input-wrap input {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  padding: 8px 14px 8px 36px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  width: 260px;
+  outline: none;
+  transition: all 0.2s;
+}
+.search-input-wrap input:focus {
+  border-color: var(--maroon);
+}
+
+.search-input-wrap .s-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  display: flex;
+}
+.search-input-wrap .s-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.records-table-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px 80px 40px;
+}
+
+.table-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.data-table th {
+  background-color: #F8FAFC;
+  padding: 14px 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-light);
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table td {
+  padding: 16px 20px;
+  font-size: 13px;
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.thumb-cell {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background-color: #EDF2F7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.thumb-cell svg {
+  width: 18px;
+  height: 18px;
+  color: var(--text-light);
+}
+
+.btn-view {
+  background-color: transparent;
+  color: var(--maroon);
+  font-weight: 600;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.btn-view:hover {
+  background-color: var(--maroon-light);
+  border-color: var(--maroon);
+}
+
+/* ===================== AUTHENTICATION CONTROL COMPONENT ===================== */
+.login-page {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  min-height: calc(100vh - 72px);
+}
+
+.login-left {
+  background: linear-gradient(135deg, var(--maroon-dark) 0%, var(--maroon) 100%);
+  color: white;
+  padding: 60px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-left .brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 48px;
+}
+.login-left .brand .icon svg {
+  width: 40px;
+  height: 40px;
+}
+.login-left .brand h2 {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.login-left .brand p {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.login-left h1 {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.login-left > p {
+  font-size: 15px;
+  opacity: 0.8;
+  line-height: 1.6;
+  max-width: 460px;
+  margin-bottom: 40px;
+}
+
+.login-features {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-feature {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.login-feature .f-icon {
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255,255,255,0.1);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-feature .f-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.login-feature span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.login-right {
+  background-color: var(--bg-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.login-form-wrap {
+  width: 100%;
+  max-width: 360px;
+}
+
+.login-avatar {
+  width: 56px;
+  height: 56px;
+  background-color: var(--maroon-light);
+  color: var(--maroon);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.login-avatar svg {
+  width: 24px;
+  height: 24px;
+}
+
+.login-form-wrap h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-dark);
+  letter-spacing: -0.02em;
+}
+
+.login-form-wrap > p {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-bottom: 24px;
+}
+
+.login-note {
+  background-color: var(--orange-light);
+  border: 1px solid #FED7AA;
+  color: #C2410C;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 24px;
+}
+
+.forgot-link, .back-link {
+  text-align: center;
+  font-size: 13px;
+  margin-top: 16px;
+}
+.forgot-link a, .back-link a {
+  color: var(--maroon);
+  font-weight: 600;
+}
+.forgot-link a:hover, .back-link a:hover {
+  text-decoration: underline;
+}
+.back-link {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  color: var(--text-light);
+}
+
+/* ===================== SECURE PORTALS ADMIN SIDEBAR SYSTEM ===================== */
+.admin-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background-color: #0F172A;
+  color: #94A3B8;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-brand {
+  padding: 24px;
+  border-bottom: 1px solid #1E293B;
+}
+
+.sidebar-brand .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+}
+.sidebar-brand .logo .icon svg {
+  width: 24px;
+  height: 24px;
+  color: #E2E8F0;
+}
+
+.sidebar-brand span {
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+}
+
+.sidebar-user {
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #1E293B;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  background-color: var(--maroon);
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-info span {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+}
+.user-info small {
+  display: block;
+  font-size: 11px;
+  color: #94A3B8;
+}
+
+.sidebar-nav {
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  color: #94A3B8;
+}
+.sidebar-nav a:hover {
+  background-color: #1E293B;
+  color: white;
+}
+.sidebar-nav a.active {
+  background-color: var(--maroon);
+  color: white;
+}
+.sidebar-nav .nav-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.sidebar-logout {
+  padding: 24px;
+  border-top: 1px solid #1E293B;
+}
+.sidebar-logout a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.sidebar-logout a:hover {
+  color: #EF4444;
+}
+.sidebar-logout svg {
+  width: 16px;
+  height: 16px;
+}
+
+.main-content {
+  background-color: var(--bg-main);
+}
+
+.admin-section {
+  display: none;
+  padding: 40px;
+}
+.admin-section.active {
+  display: block;
+}
+
+.content-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.content-header h1 {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-dark);
+  letter-spacing: -0.02em;
+}
+
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background-color: var(--bg-card);
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stat-card .icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.stat-card .icon.maroon { background-color: var(--maroon-light); color: var(--maroon); }
+.stat-card .icon.orange { background-color: var(--orange-light); color: var(--orange); }
+.stat-card .icon.green { background-color: var(--green-light); color: var(--green); }
+.stat-card .icon.blue { background-color: var(--blue-light); color: var(--blue); }
+.stat-card .icon svg { width: 20px; height: 20px; }
+
+.stat-card .val {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1.1;
+}
+.stat-card .lbl {
+  display: block;
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 2px;
+}
+
+.table-card-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.table-card-header h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+/* Row Control Operational Action Utilities */
+.action-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-approve, .btn-reject {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+}
+
+.btn-approve {
+  background-color: var(--green-light);
+  color: var(--green);
+}
+.btn-approve:hover {
+  background-color: var(--green);
+  color: white;
+}
+
+.btn-reject {
+  background-color: #FEE2E2;
+  color: #991B1B;
+}
+.btn-reject:hover {
+  background-color: #DC2626;
+  color: white;
+}
+
+/* ===================== FOOTER CORE REUSABLE ELEMENT ===================== */
+footer {
+  background-color: #0F172A;
+  color: #94A3B8;
+  border-top: 1px solid #1E293B;
+}
+
+.footer-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 40px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 40px;
+}
+
+.footer-brand h3 {
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.footer-brand p {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.footer-links h4 {
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
+
+.footer-links a {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.footer-links a:hover {
+  color: white;
+}
+.footer-links a svg {
+  width: 14px;
+  height: 14px;
+  color: #64748B;
+}
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 40px;
+  border-top: 1px solid #1E293B;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ===================== GLOBAL RESPONSIVENESS SYSTEM ===================== */
+@media (max-width: 1024px) {
+  .items-grid { grid-template-columns: repeat(2, 1fr); }
+  .matches-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-cards { grid-template-columns: repeat(2, 1fr); }
+  .form-container { grid-template-columns: 1fr; }
+  .guidelines-card { position: static; }
+  .login-page { grid-template-columns: 1fr; }
+  .login-left { display: none; }
+  .admin-layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+}
+
+@media (max-width: 768px) {
+  .top-navbar { padding: 0 20px; }
+  .navbar-links { display: none; } /* Standard architectural toggle fallback */
+  .hero h1 { font-size: 32px; }
+  .stats-bar { grid-template-columns: 1fr; }
+  .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+  .stat-item:last-child { border-bottom: none; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .search-grid { grid-template-columns: 1fr; }
+  .filter-bar { grid-template-columns: 1fr; margin-top: 20px; }
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+  .detail-content { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<svg style="display: none;">
+  <g id="icon-edu"><path fill="currentColor" d="M3.75 21h16.5a.75.75 0 0 0 0-1.5H19.5v-12c0-.414-.336-.75-.75-.75H5.25c-.414 0-.75.336-.75.75v12H3.75a.75.75 0 0 0 0 1.5M6 6.75h12v12H6zm3 4.5a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1-.75-.75m0 4.5a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1-.75-.75M12 2.25l7.5 3.5H4.5z"/></g>
+  <g id="icon-report"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></g>
+  <g id="icon-search"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></g>
+  <g id="icon-pin"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10Z"/><circle cx="12" cy="11" r="2" fill="currentColor"/></g>
+  <g id="icon-calendar"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 2v4m8-4v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></g>
+  <g id="icon-info"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16v-4m0-4h.01M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Z"/></g>
+  <g id="icon-check"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m5 13 4 4L19 7"/></g>
+  <g id="icon-device"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M7 21h10a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2Z"/></g>
+  <g id="icon-wallet"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 6h-4a2 2 0 1 0 0 4h4"/></g>
+  <g id="icon-glass"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 14c0-2.5 2-4.5 4.5-4.5S12 11.5 12 14M21 14c0-2.5-2-4.5-4.5-4.5S12 11.5 12 14M12 12h0M3 14h18M3 14c0 2 1.5 3.5 3.5 3.5S10 16 10 14M21 14c0 2-1.5 3.5-3.5 3.5S14 16 14 14"/></g>
+  <g id="icon-cloud"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 0 1-.66-7.94 6 6 0 0 1 11.66-2.08A4.5 4.5 0 0 1 21 14.5a4.5 4.5 0 0 1-4.5 4.5H7m5-9v6m-3-3 3 3 3-3"/></g>
+  <g id="icon-mail"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m3 7 9 6 9-6M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></g>
+  <g id="icon-lock"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m5-5V8a5 5 0 0 0-10 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v5a2 2 0 0 0-2-2Z"/></g>
+  <g id="icon-home"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 22V12h6v10"/></g>
+  <g id="icon-users"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2m12-10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm10 10v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></g>
+  <g id="icon-link"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71m-2.26 5.14a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></g>
+  <g id="icon-logout"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m4 13 4-4-4-4m4 4H9"/></g>
+</svg>
+
+<div id="successModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.6);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:var(--radius-lg);padding:40px;text-align:center;max-width:400px;margin:20px;box-shadow:var(--shadow-xl);">
+    <div style="width:64px;height:64px;background-color:var(--green-light);color:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px auto;">
+      <svg style="width:32px;height:32px;"><use href="#icon-check"/></svg>
+    </div>
+    <h3 style="font-size:20px;font-weight:800;margin-bottom:10px;color:var(--text-dark);letter-spacing:-0.01em;">Submitted Successfully</h3>
+    <p id="successMsg" style="font-size:14px;color:var(--text-light);line-height:1.6;margin-bottom:28px;"></p>
+    <button onclick="closeModal()" style="background:var(--maroon);color:white;border:none;padding:12px 40px;border-radius:var(--radius-md);font-weight:700;font-size:14px;cursor:pointer;width:100%;">Acknowledge</button>
+  </div>
+</div>
+
+<nav class="top-navbar" id="publicNav">
+  <div class="navbar-brand">
+    <svg class="logo-icon-svg"><use href="#icon-edu"/></svg>
+    <div>
+      <span>DHA Suffa University</span>
+      <small>Lost & Found Portal</small>
+    </div>
+  </div>
+  <div class="navbar-links">
+    <a href="#" data-page="page-home" onclick="showPage('page-home');return false;" class="active">Home</a>
+    <a href="#" data-page="page-search" onclick="showPage('page-search');return false;">Search Items</a>
+    <a href="#" data-page="page-report-lost" onclick="showPage('page-report-lost');return false;">Report Lost</a>
+    <a href="#" data-page="page-report-found" onclick="showPage('page-report-found');return false;">Report Found</a>
+    <a href="#" data-page="page-records" onclick="showPage('page-records');return false;">Records</a>
+    <a href="#" class="admin-link" onclick="showPage('page-admin-login');hidePublicNav();return false;">Admin Login</a>
+  </div>
+</nav>
+
+<div id="page-home" class="page active">
+  <div class="hero">
+    <h1>Lost Something at DSU?<br>We'll Help You Find It</h1>
+    <p>Students and staff can quickly report or search for missing belongings. Our portal connects the DSU community to reunite lost items with their rightful owners.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showPage('page-report-lost')">
+        <svg style="width:16px;height:16px;"><use href="#icon-report"/></svg> Report a Lost Item
+      </button>
+      <button class="btn-outline" onclick="showPage('page-report-found')">
+        <svg style="width:16px;height:16px;"><use href="#icon-search"/></svg> Report a Found Item
+      </button>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-number">1,247</span>
+      <div class="stat-label">Lost Items Reported</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">983</span>
+      <div class="stat-label">Found Items Reported</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number orange">762</span>
+      <div class="stat-label">Successfully Returned</div>
+    </div>
+  </div>
+
+  <div class="section" style="background:white;">
+    <div class="section-title">How It Works</div>
+    <div class="section-sub">Three simple steps to recover your belongings</div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-icon maroon">
+          <svg><use href="#icon-report"/></svg>
+        </div>
+        <h3>1. Report the Item</h3>
+        <p>Submit a detailed report of your lost or found item including description, location, and time. Upload photos if available.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon maroon">
+          <svg><use href="#icon-search"/></svg>
+        </div>
+        <h3>2. Search & Review</h3>
+        <p>Browse through listed items or use filters to find matches. Our system also suggests possible matches automatically.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon orange">
+          <svg><use href="#icon-check"/></svg>
+        </div>
+        <h3>3. Verify & Reclaim</h3>
+        <p>Contact the finder or admin, verify ownership through identification questions, and collect your item from the designated office.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Recent Activity</div>
+    <div class="section-sub">Latest lost and found listings from the DSU community</div>
+    <div class="items-grid">
+      <div class="item-card" onclick="showPage('page-detail')">
+        <div class="item-img">
+          <div class="img-placeholder"><svg><use href="#icon-wallet"/></svg></div>
+          <div class="item-status-badge"><span class="badge-lost">Lost</span></div>
+        </div>
+        <div class="item-body">
+          <div class="item-category"><svg><use href="#icon-wallet"/></svg> Accessories</div>
+          <div class="item-name">Black Leather Wallet</div>
+          <div class="item-meta">
+            <span><svg><use href="#icon-pin"/></svg> Library, 2nd Floor</span>
+            <span><svg><use href="#icon-calendar"/></svg> 2 hours ago</span>
+          </div>
+        </div>
+        <span class="view-details">View Details <span>&rarr;</span></span>
+      </div>
+      <div class="item-card" onclick="showPage('page-detail')">
+        <div class="item-img">
+          <div class="img-placeholder"><svg><use href="#icon-glass"/></svg></div>
+          <div class="item-status-badge"><span class="badge-found">Found</span></div>
+        </div>
+        <div class="item-body">
+          <div class="item-category"><svg><use href="#icon-glass"/></svg> Eyewear</div>
+          <div class="item-name">Prescription Glasses</div>
+          <div class="item-meta">
+            <span><svg><use href="#icon-pin"/></svg> Cafeteria, Main Campus</span>
+            <span><svg><use href="#icon-calendar"/></svg> 5 hours ago</span>
+          </div>
+        </div>
+        <span class="view-details">View Details <span>&rarr;</span></span>
+      </div>
+      <div class="item-card" onclick="showPage('page-detail')">
+        <div class="item-img">
+          <div class="img-placeholder"><svg><use href="#icon-device"/></svg></div>
+          <div class="item-status-badge"><span class="badge-lost">Lost</span></div>
+        </div>
+        <div class="item-body">
+          <div class="item-category"><svg><use href="#icon-device"/></svg> Electronics</div>
+          <div class="item-name">Blue USB Flash Drive</div>
+          <div class="item-meta">
+            <span><svg><use href="#icon-pin"/></svg> Room 301, CS Block</span>
+            <span><svg><use href="#icon-calendar"/></svg> 1 day ago</span>
+          </div>
+        </div>
+        <span class="view-details">View Details <span>&rarr;</span></span>
+      </div>
+      <div class="item-card" onclick="showPage('page-detail')">
+        <div class="item-img">
+          <div class="img-placeholder"><svg><use href="#icon-edu"/></svg></div>
+          <div class="item-status-badge"><span class="badge-found">Found</span></div>
+        </div>
+        <div class="item-body">
+          <div class="item-category"><svg><use href="#icon-edu"/></svg> Books</div>
+          <div class="item-name">Advanced Calculus Textbook</div>
+          <div class="item-meta">
+            <span><svg><use href="#icon-pin"/></svg> Auditorium, Ground Floor</span>
+            <span><svg><use href="#icon-calendar"/></svg> 1 day ago</span>
+          </div>
+        </div>
+        <span class="view-details">View Details <span>&rarr;</span></span>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:40px;">
+      <button class="btn-maroon" onclick="showPage('page-search')">View All Listings</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>DHA Suffa University</h3>
+        <p>DSU Lost & Found Portal — A centralized platform helping students and staff recover lost belongings across all DSU campuses.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <a href="#" onclick="showPage('page-home');return false;">Home</a>
+        <a href="#" onclick="showPage('page-search');return false;">Search Items</a>
+        <a href="#" onclick="showPage('page-report-lost');return false;">Report Lost</a>
+        <a href="#" onclick="showPage('page-report-found');return false;">Report Found</a>
+        <a href="#" onclick="showPage('page-records');return false;">Records</a>
+      </div>
+      <div class="footer-links">
+        <h4>Contact</h4>
+        <a href="#"><svg style="width:14px;height:14px;"><use href="#icon-pin"/></svg> DHA Phase VII, Karachi</a>
+        <a href="#"><svg style="width:14px;height:14px;"><use href="#icon-mail"/></svg> lostandfound@dsu.edu.pk</a>
+        <a href="#"><svg style="width:14px;height:14px;"><use href="#icon-device"/></svg> +92-21-111-DSU-DSU</a>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 DHA Suffa University. All rights reserved. | Lost & Found Portal</div>
+  </footer>
+</div>
+
+<div id="page-report-lost" class="page form-page">
+  <div class="form-container">
+    <div class="form-card">
+      <div class="form-card-header">
+        <h2><svg style="color:var(--maroon);"><use href="#icon-report"/></svg> Report a Lost Item</h2>
+        <p>Fill in the details below to report your lost item. Accurate and complete information significantly improves the chances of recovery.</p>
+      </div>
+      <div class="form-body">
+        <form id="lostForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name <span class="req">*</span></label>
+              <input type="text" class="form-control" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+              <label>Student ID <span class="req">*</span></label>
+              <input type="text" class="form-control" placeholder="e.g. 2023-CS-104" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email Address <span class="req">*</span></label>
+              <input type="email" class="form-control" placeholder="your@dsu.edu.pk" required>
+            </div>
+            <div class="form-group">
+              <label>Item Category <span class="req">*</span></label>
+              <select class="form-control" required>
+                <option value="">Select a category</option>
+                <option>ID Card</option>
+                <option>Keys</option>
+                <option>Bag / Backpack</option>
+                <option>Phone</option>
+                <option>Laptop</option>
+                <option>Charger</option>
+                <option>Water Bottle</option>
+                <option>Wallet</option>
+                <option>Books / Notes</option>
+                <option>Glasses</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Last Seen Location <span class="req">*</span></label>
+              <select class="form-control" required>
+                <option value="">Select location</option>
+                <option>Main Library</option>
+                <option>Cafeteria</option>
+                <option>Ground Floor</option>
+                <option>Classroom Block A</option>
+                <option>Classroom Block B</option>
+                <option>CS Lab Building</option>
+                <option>Parking Area</option>
+                <option>Hostel</option>
+                <option>Sports Ground / Complex</option>
+                <option>Prayer Area</option>
+                <option>Auditorium</option>
+                <option>Engineering Block</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Date Lost <span class="req">*</span></label>
+              <input type="date" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Time Lost (Approx.)</label>
+            <input type="time" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Description <span class="req">*</span></label>
+            <textarea class="form-control" rows="4" placeholder="Describe your item in detail — color, brand, size, any unique marks or identifiers..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Upload Image <span style="color:var(--text-muted);font-weight:400;">(Optional)</span></label>
+            <div class="upload-area">
+              <input type="file" id="lostImgInput" accept="image/*">
+              <div class="upload-icon"><svg><use href="#icon-cloud"/></svg></div>
+              <h4>Drag & drop your image here</h4>
+              <p>or click to browse<br><small>Accepted formats: JPG, PNG, WEBP — Max 5MB</small></p>
+            </div>
+            <div class="upload-preview" id="lostPreview">
+              <img class="preview-img" id="lostPreviewImg" src="" alt="preview">
+              <div class="preview-info">
+                <span id="lostPreviewName"></span>
+                <small>Image ready to upload</small>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="submit-btn maroon" data-label="Submit Lost Item Report">Submit Lost Item Report</button>
+        </form>
+      </div>
+    </div>
+    <div>
+      <div class="guidelines-card">
+        <h3><svg><use href="#icon-report"/></svg> Reporting Guidelines</h3>
+        <div class="guideline-item">
+          <div class="g-icon"><svg><use href="#icon-info"/></svg></div>
+          <p>Provide accurate details about the item's appearance and last known location.</p>
+        </div>
+        <div class="guideline-item">
+          <div class="g-icon"><svg><use href="#icon-calendar"/></svg></div>
+          <p>Reports filed within 24 hours have a 73% higher recovery rate.</p>
+        </div>
+        <div class="guideline-item">
+          <div class="g-icon"><svg><use href="#icon-cloud"/></svg></div>
+          <p>Upload a photo if available — visual identification speeds up matching significantly.</p>
+        </div>
+        <div class="guideline-item">
+          <div class="g-icon"><svg><use href="#icon-mail"/></svg></div>
+          <p>You will be notified via email if a matching item is found in our system.</p>
+        </div>
+        <div class="quick-links">
+          <h4>Quick Links</h4>
+          <a href="#" onclick="showPage('page-home');return false;"><svg><use href="#icon-home"/></svg> Home</a>
+          <a href="#" onclick="showPage('page-search');return false;"><svg><use href="#icon-search"/></svg> Search Items</a>
+          <a href="#" onclick="showPage('page-report-found');return false;"><svg><use href="#icon-check"/></svg> Report Found Item</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-bottom" style="border:none;padding:24px 40px;">&copy; 2026 DHA Suffa University — Lost & Found Portal</div>
+  </footer>
+</div>
+
+<div id="page-report-found" class="page form-page">
+  <div class="form-container">
+    <div class="form-card">
+      <div class="form-card-header orange">
+        <h2 class="orange-title"><svg style="color:var(--orange);"><use href="#icon-check"/></svg> Report a Found Item</h2>
+        <p>Help reunite someone with their belongings. Please provide as much detail as possible — accurate descriptions and clear photos significantly improve matching speed.</p>
+      </div>
+      <div class="form-body">
+        <form id="foundForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name <span class="req">*</span></label>
+              <input type="text" class="form-control" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+              <label>Email Address <span class="req">*</span></label>
+              <input type="email" class="form-control" placeholder="your@dsu.edu.pk" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Item Category <span class="req">*</span></label>
+              <select class="form-control" required>
+                <option value="">Select a category</option>
+                <option>ID Card</option>
+                <option>Keys</option>
+                <option>Bag / Backpack</option>
+                <option>Phone</option>
+                <option>Laptop</option>
+                <option>Charger</option>
+                <option>Water Bottle</option>
+                <option>Wallet</option>
+                <option>Books / Notes</option>
+                <option>Glasses</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Found Location <span class="req">*</span></label>
+              <select class="form-control" required>
+                <option value="">Select location</option>
+                <option>Main Library</option>
+                <option>Cafeteria</option>
+                <option>Ground Floor</option>
+                <option>Classroom Block A</option>
+                <option>Classroom Block B</option>
+                <option>CS Lab Building</option>
+                <option>Parking Area</option>
+                <option>Hostel</option>
+                <option>Sports Ground / Complex</option>
+                <option>Prayer Area</option>
+                <option>Auditorium</option>
+                <option>Engineering Block</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date Found <span class="req">*</span></label>
+              <input type="date" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Time Found (Approx.)</label>
+              <input type="time" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Current Item Location</label>
+            <input type="text" class="form-control" placeholder="Where is the item right now? e.g. Security Office, Admin Block">
+          </div>
+          <div class="form-group">
+            <label>Description <span class="req">*</span></label>
+            <textarea class="form-control" rows="4" placeholder="Describe the found item — color, brand, condition, any unique marks or identifiers..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Upload Image <span style="color:var(--text-muted);font-weight:400;">(Optional but recommended)</span></label>
+            <div class="upload-area">
+              <input type="file" id="foundImgInput" accept="image/*">
+              <div class="upload-icon"><svg><use href="#icon-cloud"/></svg></div>
+              <h4>Drag & drop your image here</h4>
+              <p>or click to browse<br><small>Accepted formats: JPG, PNG, WEBP — Max 5MB</small></p>
+            </div>
+            <div class="upload-preview" id="foundPreview">
+              <img class="preview-img" id="foundPreviewImg" src="" alt="preview">
+              <div class="preview-info">
+                <span id="foundPreviewName"></span>
+                <small>Image ready to upload</small>
+              </div>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--orange-dark);margin-bottom:16px;font-weight:500;">Please verify your contact details are correct so the owner can reach you promptly.</p>
+          <button type="submit" class="submit-btn orange" data-label="Submit Found Item">Submit Found Item</button>
+        </form>
+      </div>
+    </div>
+    <div>
+      <div class="guidelines-card">
+        <h3><svg><use href="#icon-report"/></svg> Reporting Guidelines</h3>
+        <div class="guideline-item">
+          <div class="g-icon"><svg><use href="#icon-info"/></svg></div>
+          <p>Provide accurate details about the item's appearance and where exactly you found it.</p>
+        </div>
+        <div class="guideline-item">
+          <div class="g-icon"><svg><use href="#icon-cloud"/></svg></div>
+          <p>Uploading a clear photo greatly speeds up the matching and verification process.</p>
+        </div>
+        <div class="guideline-item">
+          <div class="g-icon"><svg><use href="#icon-lock"/></svg></div>
+          <p>If it's a valuable item like a phone or laptop, hand it to the Security Office first.</p>
+        </div>
+        <div class="guideline-item">
+          <div class="g-icon"><svg><use href="#icon-mail"/></svg></div>
+          <p>Once matched, both parties will be notified via email with contact details.</p>
+        </div>
+        <div class="quick-links">
+          <h4>Quick Links</h4>
+          <a href="#" onclick="showPage('page-home');return false;"><svg><use href="#icon-home"/></svg> Home</a>
+          <a href="#" onclick="showPage('page-search');return false;"><svg><use href="#icon-search"/></svg> Search Items</a>
+          <a href="#" onclick="showPage('page-report-lost');return false;"><svg><use href="#icon-report"/></svg> Report Lost Item</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-bottom" style="border:none;padding:24px 40px;">&copy; 2026 DHA Suffa University — Lost & Found Portal</div>
+  </footer>
+</div>
+
+<div id="page-search" class="page">
+  <div class="search-header">
+    <h1>Search Lost & Found Items</h1>
+    <p>Browse all reported items across campus. Use filters to narrow your search.</p>
+  </div>
+  
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label>Category</label>
+      <select id="filterCat" class="form-control" onchange="searchItems()">
+        <option value="">All Categories</option>
+        <option value="wallet">Wallet</option>
+        <option value="laptop">Laptop</option>
+        <option value="keys">Keys</option>
+        <option value="bag">Bag</option>
+        <option value="glasses">Glasses</option>
+        <option value="phone">Phone</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Location</label>
+      <select id="filterLoc" class="form-control" onchange="searchItems()">
+        <option value="">All Locations</option>
+        <option value="library">Main Library</option>
+        <option value="cafeteria">Cafeteria</option>
+        <option value="sports">Sports Complex</option>
+        <option value="cslab">CS Lab Building</option>
+        <option value="engineering">Engineering Block</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Date Range</label>
+      <select class="form-control">
+        <option>Any Time</option>
+        <option>Today</option>
+        <option>Last 7 Days</option>
+        <option>Last 30 Days</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Status</label>
+      <select id="filterStatus" class="form-control" onchange="searchItems()">
+        <option value="">All</option>
+        <option value="lost">Lost</option>
+        <option value="found">Found</option>
+        <option value="matched">Matched</option>
+        <option value="claimed">Claimed</option>
+      </select>
+    </div>
+    <button class="btn-maroon" style="height: 42px;" onclick="searchItems()">Execute Filter</button>
+  </div>
+  
+  <div class="search-results">
+    <div class="results-meta">
+      <span>Showing <strong id="resultsCount" style="color:var(--text-dark);">5 results</strong> matching your criteria</span>
+      <select class="sort-select"><option>Most Recent</option><option>Oldest First</option><option>Category A-Z</option></select>
+    </div>
+    <div class="search-grid">
+      <div class="item-card search-item-card" data-cat="laptop" data-loc="library" data-status="lost" onclick="showPage('page-detail')">
+        <div class="item-img">
+          <div class="img-placeholder"><svg><use href="#icon-device"/></svg></div>
+          <div class="item-status-badge"><span class="badge-lost">Lost</span></div>
+        </div>
+        <div class="item-body">
+          <div class="item-category"><svg><use href="#icon-device"/></svg> Electronics</div>
+          <div class="item-name">MacBook Pro 14-inch</div>
+          <div class="item-meta">
+            <span><svg><use href="#icon-pin"/></svg> Main Library</span>
+            <span><svg><use href="#icon-calendar"/></svg> Jan 15, 2026</span>
+          </div>
+          <p style="font-size:13px;color:var(--text-light);margin-top:12px;line-height:1.5;">Silver, has a DSU sticker on the lid. Last seen during evening study session.</p>
+        </div>
+        <span class="view-details">View Details <span>&rarr;</span></span>
+      </div>
+      <div class="item-card search-item-card" data-cat="keys" data-loc="cafeteria" data-status="found" onclick="showPage('page-detail')">
+        <div class="item-img">
+          <div class="img-placeholder"><svg><use href="#icon-lock"/></svg></div>
+          <div class="item-status-badge"><span class="badge-found">Found</span></div>
+        </div>
+        <div class="item-body">
+          <div class="item-category"><svg><use href="#icon-lock"/></svg> Keys</div>
+          <div class="item-name">Toyota Car Keys</div>
+          <div class="item-meta">
+            <span><svg><use href="#icon-pin"/></svg> Cafeteria</span>
+            <span><svg><use href="#icon-calendar"/></svg> Jan 14, 2026</span>
+          </div>
+          <p style="font-size:13px;color:var(--text-light);margin-top:12px;line-height:1.5;">Red keychain with two keys attached. Found near the main entrance.</p>
+        </div>
+        <span class="view-details">View Details <span>&rarr;</span></span>
+      </div>
+      <div class="item-card search-item-card" data-cat="bag" data-loc="sports" data-status="lost" onclick="showPage('page-detail')">
+        <div class="item-img">
+          <div class="img-placeholder"><svg><use href="#icon-report"/></svg></div>
+          <div class="item-status-badge"><span class="badge-lost">Lost</span></div>
+        </div>
+        <div class="item-body">
+          <div class="item-category"><svg><use href="#icon-report"/></svg> Bag</div>
+          <div class="item-name">Navy Backpack</div>
+          <div class="item-meta">
+            <span><svg><use href="#icon-pin"/></svg> Sports Complex</span>
+            <span><svg><use href="#icon-calendar"/></svg> Jan 13, 2026</span>
+          </div>
+          <p style="font-size:13px;color:var(--text-light);margin-top:12px;line-height:1.5;">Contains textbooks and a calculator. Brand: North Face. Has initials 'MR' stitched.</p>
+        </div>
+        <span class="view-details">View Details <span>&rarr;</span></span>
+      </div>
+      <div class="item-card search-item-card" data-cat="wallet" data-loc="engineering" data-status="found" onclick="showPage('page-detail')">
+        <div class="item-img">
+          <div class="img-placeholder"><svg><use href="#icon-wallet"/></svg></div>
+          <div class="item-status-badge"><span class="badge-found">Found</span></div>
+        </div>
+        <div class="item-body">
+          <div class="item-category"><svg><use href="#icon-wallet"/></svg> Accessories</div>
+          <div class="item-name">Black Leather Wallet</div>
+          <div class="item-meta">
+            <span><svg><use href="#icon-pin"/></svg> Engineering Block</span>
+            <span><svg><use href="#icon-calendar"/></svg> Jan 12, 2026</span>
+          </div>
+          <p style="font-size:13px;color:var(--text-light);margin-top:12px;line-height:1.5;">Contains student ID for registration number 2023-CS-104. No cash inside.</p>
+        </div>
+        <span class="view-details">View Details <span>&rarr;</span></span>
+      </div>
+      <div class="item-card search-item-card" data-cat="glasses" data-loc="cslab" data-status="lost" onclick="showPage('page-detail')">
+        <div class="item-img">
+          <div class="img-placeholder"><svg><use href="#icon-glass"/></svg></div>
+          <div class="item-status-badge"><span class="badge-lost">Lost</span></div>
+        </div>
+        <div class="item-body">
+          <div class="item-category"><svg><use href="#icon-glass"/></svg> Eyewear</div>
+          <div class="item-name">Gold-Rimmed Glasses</div>
+          <div class="item-meta">
+            <span><svg><use href="#icon-pin"/></svg> CS Lab Building</span>
+            <span><svg><use href="#icon-calendar"/></svg> Jan 11, 2026</span>
+          </div>
+          <p style="font-size:13px;color:var(--text-light);margin-top:12px;line-height:1.5;">Prescription glasses with gold frame in a brown case. Left after Data Structures class.</p>
+        </div>
+        <span class="view-details">View Details <span>&rarr;</span></span>
+      </div>
+    </div>
+    
+    <div style="text-align:center;margin-top:56px;padding:48px;background:white;border-radius:var(--radius-lg);border:1px solid var(--border);box-shadow:var(--shadow-sm);">
+      <div style="width:48px;height:48px;background-color:var(--maroon-light);color:var(--maroon);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px auto;">
+        <svg style="width:20px;height:20px;"><use href="#icon-search"/></svg>
+      </div>
+      <p style="font-size:16px;font-weight:700;margin-bottom:6px;color:var(--text-dark);">Can't find what you're looking for?</p>
+      <p style="font-size:14px;color:var(--text-light);margin-bottom:24px;max-width:480px;margin-left:auto;margin-right:auto;">If your item isn't listed, you can submit a formal report and our system will notify you automatically of any potential future matches.</p>
+      <div style="display:flex;gap:16px;justify-content:center;">
+        <button class="btn-maroon" onclick="showPage('page-report-lost')">Report Lost Item</button>
+        <button class="btn-outline" onclick="showPage('page-report-found')">Report Found Item</button>
+      </div>
+    </div>
+  </div>
+  <footer><div class="footer-bottom" style="border:none;padding:24px 40px;">&copy; 2026 DHA Suffa University — Lost & Found Portal</div></footer>
+</div>
+
+<div id="page-detail" class="page detail-page">
+  <div class="breadcrumb">
+    <a href="#" onclick="showPage('page-search');return false;">Search Items</a> / Item Record Details
+  </div>
+  <div class="detail-content">
+    <div class="detail-images">
+      <div class="main-img" style="border-radius:var(--radius-md);height:320px;display:flex;align-items:center;justify-content:center;">
+        <svg><use href="#icon-wallet"/></svg>
+      </div>
+      <div class="thumb-row">
+        <div class="thumb active" style="display:flex;align-items:center;justify-content:center;"><svg><use href="#icon-wallet"/></svg></div>
+        <div class="thumb" style="display:flex;align-items:center;justify-content:center;"><svg><use href="#icon-report"/></svg></div>
+        <div class="thumb" style="display:flex;align-items:center;justify-content:center;"><svg><use href="#icon-search"/></svg></div>
+      </div>
+    </div>
+    <div class="detail-info">
+      <h2>Black Leather Wallet</h2>
+      <div class="info-section">
+        <h4>Item Information</h4>
+        <div class="info-grid">
+          <div class="info-item"><label>Category</label><span>Personal Accessories</span></div>
+          <div class="info-item"><label>Report Type</label><span>Found Item</span></div>
+          <div class="info-item"><label>Date Reported</label><span>January 14, 2026</span></div>
+          <div class="info-item"><label>Date Found</label><span>January 13, 2026</span></div>
+          <div class="info-item"><label>Location</label><span>Main Campus — Library Building, 2nd Floor</span></div>
+          <div class="info-item"><label>Reference ID</label><span style="color:var(--maroon); font-weight:700;">#DSU-F-2026-0347</span></div>
+        </div>
+      </div>
+      <div class="info-section">
+        <h4>Description & Notes</h4>
+        <p class="detail-desc">Black leather bi-fold wallet found near the study carrels on the second floor of the library. Contains what appears to be a student ID card and some cash. The wallet has a small silver clasp on the front and a noticeable scratch on the back lower-right corner. No name was visible on the exterior.</p>
+      </div>
+      <div class="info-section">
+        <h4>Current Status</h4>
+        <span class="badge-found" style="font-size:12px;padding:6px 16px;">Found — Pending Claim</span>
+        <p style="font-size:12px;color:var(--text-light);margin-top:8px;">Last updated: Jan 15, 2026</p>
+      </div>
+      <div class="detail-actions">
+        <button class="btn-maroon">Claim This Item</button>
+        <button class="btn-outline" style="color:var(--maroon);border-color:var(--maroon);" onclick="showPage('page-report-lost')">Report Similar Lost Item</button>
+        <button class="btn-outline" style="color:var(--text-light);border-color:var(--border);" onclick="showPage('page-search')">Back to Search</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="matches-section">
+    <h3>Possible Matches & Related Items</h3>
+    <div class="matches-grid">
+      <div class="match-card">
+        <div class="match-img"><div style="height:120px;display:flex;align-items:center;justify-content:center;"><svg><use href="#icon-wallet"/></svg></div></div>
+        <div class="match-body">
+          <span class="badge-lost" style="font-size:9px;padding:2px 8px;">Lost</span>
+          <h4>Brown Leather Wallet</h4>
+          <p>Jan 12 — Sports Complex</p>
+          <p class="match-percent">85% match</p>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-img"><div style="height:120px;display:flex;align-items:center;justify-content:center;"><svg><use href="#icon-wallet"/></svg></div></div>
+        <div class="match-body">
+          <span class="badge-matched" style="font-size:9px;padding:2px 8px;">Matched</span>
+          <h4>Navy Card Holder</h4>
+          <p>Jan 10 — Cafeteria</p>
+          <p class="match-percent">72% match</p>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-img"><div style="height:120px;display:flex;align-items:center;justify-content:center;"><svg><use href="#icon-wallet"/></svg></div></div>
+        <div class="match-body">
+          <span class="badge-lost" style="font-size:9px;padding:2px 8px;">Lost</span>
+          <h4>Black Bifold Wallet</h4>
+          <p>Jan 8 — Block C, Room 301</p>
+          <p class="match-percent">68% match</p>
+        </div>
+      </div>
+      <div class="match-card">
+        <div class="match-img"><div style="height:120px;display:flex;align-items:center;justify-content:center;"><svg><use href="#icon-wallet"/></svg></div></div>
+        <div class="match-body">
+          <span class="badge-claimed" style="font-size:9px;padding:2px 8px;">Claimed</span>
+          <h4>Black Slim Cardholder</h4>
+          <p>Jan 5 — Parking Lot A</p>
+          <p class="match-percent">60% match</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer><div class="footer-bottom" style="border:none;padding:24px 40px;">&copy; 2026 DHA Suffa University — Lost & Found Portal</div></footer>
+</div>
+
+<div id="page-records" class="page">
+  <div class="records-header">
+    <h1><svg><use href="#icon-report"/></svg> All Records</h1>
+    <p>View all submitted lost and found reports across DSU campus</p>
+  </div>
+  <div class="records-tabs">
+    <button class="tab-btn active" onclick="filterRecords('all')">All Records</button>
+    <button class="tab-btn" onclick="filterRecords('lost')">Lost Items</button>
+    <button class="tab-btn" onclick="filterRecords('found')">Found Items</button>
+    <button class="tab-btn" onclick="filterRecords('matched')">Matched</button>
+    <button class="tab-btn" onclick="filterRecords('claimed')">Claimed</button>
+  </div>
+  <div class="records-toolbar">
+    <span style="font-size:14px;color:var(--text-light);">Showing <strong style="color:var(--text-dark);">6 records</strong></span>
+    <div class="search-input-wrap">
+      <span class="s-icon"><svg><use href="#icon-search"/></svg></span>
+      <input type="text" placeholder="Search records...">
+    </div>
+  </div>
+  <div class="records-table-wrap">
+    <div class="table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Visual</th>
+            <th>Item Name</th>
+            <th>Category</th>
+            <th>Reported By</th>
+            <th>Location</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="record-row" data-type="lost">
+            <td><div class="thumb-cell"><svg><use href="#icon-device"/></svg></div></td>
+            <td style="font-weight:600; color:var(--text-dark);">MacBook Pro 14-inch</td>
+            <td>Electronics</td>
+            <td>Ahmed Khan</td>
+            <td>Main Library</td>
+            <td>Jan 15, 2026</td>
+            <td><span class="badge-lost">Lost</span></td>
+            <td><button class="btn-view" onclick="showPage('page-detail')">View</button></td>
+          </tr>
+          <tr class="record-row" data-type="found">
+            <td><div class="thumb-cell"><svg><use href="#icon-lock"/></svg></div></td>
+            <td style="font-weight:600; color:var(--text-dark);">Toyota Car Keys</td>
+            <td>Keys</td>
+            <td>Sara Ali</td>
+            <td>Cafeteria</td>
+            <td>Jan 14, 2026</td>
+            <td><span class="badge-found">Found</span></td>
+            <td><button class="btn-view" onclick="showPage('page-detail')">View</button></td>
+          </tr>
+          <tr class="record-row" data-type="lost">
+            <td><div class="thumb-cell"><svg><use href="#icon-report"/></svg></div></td>
+            <td style="font-weight:600; color:var(--text-dark);">Navy Backpack</td>
+            <td>Bag</td>
+            <td>Muhammad Raza</td>
+            <td>Sports Complex</td>
+            <td>Jan 13, 2026</td>
+            <td><span class="badge-lost">Lost</span></td>
+            <td><button class="btn-view" onclick="showPage('page-detail')">View</button></td>
+          </tr>
+          <tr class="record-row" data-type="found">
+            <td><div class="thumb-cell"><svg><use href="#icon-wallet"/></svg></div></td>
+            <td style="font-weight:600; color:var(--text-dark);">Black Leather Wallet</td>
+            <td>Accessories</td>
+            <td>Fatima Noor</td>
+            <td>Engineering Block</td>
+            <td>Jan 12, 2026</td>
+            <td><span class="badge-found">Found</span></td>
+            <td><button class="btn-view" onclick="showPage('page-detail')">View</button></td>
+          </tr>
+          <tr class="record-row" data-type="matched">
+            <td><div class="thumb-cell"><svg><use href="#icon-glass"/></svg></div></td>
+            <td style="font-weight:600; color:var(--text-dark);">Gold-Rimmed Glasses</td>
+            <td>Eyewear</td>
+            <td>Ali Hassan</td>
+            <td>CS Lab Building</td>
+            <td>Jan 11, 2026</td>
+            <td><span class="badge-matched">Matched</span></td>
+            <td><button class="btn-view" onclick="showPage('page-detail')">View</button></td>
+          </tr>
+          <tr class="record-row" data-type="claimed">
+            <td><div class="thumb-cell"><svg><use href="#icon-device"/></svg></div></td>
+            <td style="font-weight:600; color:var(--text-dark);">iPhone 13 (Black)</td>
+            <td>Phone</td>
+            <td>Zara Sheikh</td>
+            <td>Auditorium</td>
+            <td>Jan 10, 2026</td>
+            <td><span class="badge-claimed">Claimed</span></td>
+            <td><button class="btn-view" onclick="showPage('page-detail')">View</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <footer><div class="footer-bottom" style="border:none;padding:24px 40px;">&copy; 2026 DHA Suffa University — Lost & Found Portal</div></footer>
+</div>
+
+<div id="page-admin-login" class="page">
+  <div class="login-page">
+    <div class="login-left">
+      <div class="brand">
+        <div class="icon"><svg><use href="#icon-edu"/></svg></div>
+        <div><h2>DHA Suffa University</h2><p>Learn To Discover</p></div>
+      </div>
+      <h1>Lost & Found Management System</h1>
+      <p>A centralized portal for university staff to efficiently manage, track, and resolve lost and found item records across all DSU campuses.</p>
+      <div class="login-features">
+        <div class="login-feature"><div class="f-icon"><svg><use href="#icon-lock"/></svg></div><span>Secure Access — Staff Only</span></div>
+        <div class="login-feature"><div class="f-icon"><svg><use href="#icon-report"/></svg></div><span>Record Management & Tracking</span></div>
+        <div class="login-feature"><div class="f-icon"><svg><use href="#icon-check"/></svg></div><span>Approve, Reject & Manage Reports</span></div>
+      </div>
+    </div>
+    <div class="login-right">
+      <div class="login-form-wrap">
+        <div class="login-avatar"><svg><use href="#icon-edu"/></svg></div>
+        <h2>Administrator Access</h2>
+        <p>Sign in to manage lost and found records</p>
+        <div class="login-note">This portal is restricted to authorized university personnel only.</div>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label>Email or Username</label>
+            <input type="text" class="form-control" placeholder="admin@dsu.edu.pk" required>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required>
+          </div>
+          <button type="submit" class="submit-btn maroon">Sign In</button>
+        </form>
+        <div class="forgot-link"><a href="#">Forgot your password?</a></div>
+        <div class="back-link">Not an admin? <a href="#" onclick="showPage('page-home');showPublicNav();return false;">Return to Home</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="page-admin" class="page">
+  <div class="admin-layout">
+    <div class="sidebar">
+      <div class="sidebar-brand">
+        <div class="logo"><div class="icon"><svg><use href="#icon-edu"/></svg></div><div><span>DSU Portal</span></div></div>
+        <small style="color:rgba(255,255,255,0.4);font-size:11px;margin-top:4px;display:block;font-weight:500;">Lost & Found Admin Panel</small>
+      </div>
+      <div class="sidebar-user">
+        <div class="user-avatar">AK</div>
+        <div class="user-info"><span>Ahmed Khan</span><small>Administrator</small></div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="active" onclick="showAdminSection('admin-dashboard');return false;"><span class="nav-icon"><svg><use href="#icon-home"/></svg></span> Dashboard</a>
+        <a href="#" onclick="showAdminSection('admin-pending');return false;"><span class="nav-icon"><svg><use href="#icon-calendar"/></svg></span> Pending Approvals <span style="background:var(--orange);color:white;border-radius:10px;padding:2px 8px;font-size:10px;margin-left:auto;font-weight:700;">3</span></a>
+        <a href="#" onclick="showAdminSection('admin-all');return false;"><span class="nav-icon"><svg><use href="#icon-report"/></svg></span> All Records</a>
+        <a href="#" onclick="showAdminSection('admin-users');return false;"><span class="nav-icon"><svg><use href="#icon-users"/></svg></span> User Management</a>
+        <a href="#" onclick="showPage('page-search');return false;"><span class="nav-icon"><svg><use href="#icon-search"/></svg></span> Search Items</a>
+      </nav>
+      <div class="sidebar-logout">
+        <a href="#" onclick="showPage('page-home');showPublicNav();return false;"><svg><use href="#icon-logout"/></svg> Logout</a>
+      </div>
+    </div>
+    
+    <div class="main-content">
+      <div id="admin-dashboard" class="admin-section active">
+        <div class="content-header">
+          <h1>Dashboard Overview</h1>
+          <span style="font-size:14px;color:var(--text-light);">Welcome back, <strong>Ahmed Khan</strong></span>
+        </div>
+        <div class="content-body">
+          <div class="stats-cards">
+            <div class="stat-card"><div class="icon maroon"><svg><use href="#icon-report"/></svg></div><div><span class="val">89</span><span class="lbl">Total Reports</span></div></div>
+            <div class="stat-card"><div class="icon orange"><svg><use href="#icon-calendar"/></svg></div><div><span class="val">3</span><span class="lbl">Pending Approval</span></div></div>
+            <div class="stat-card"><div class="icon green"><svg><use href="#icon-check"/></svg></div><div><span class="val">62</span><span class="lbl">Approved</span></div></div>
+            <div class="stat-card"><div class="icon blue"><svg><use href="#icon-link"/></svg></div><div><span class="val">27</span><span class="lbl">Successfully Matched</span></div></div>
+          </div>
+          <div class="table-card">
+            <div class="table-card-header">
+              <h3>Pending Approvals</h3>
+              <span style="font-size:13px;color:var(--orange-dark);font-weight:600;">3 items need review</span>
+            </div>
+            <table class="data-table">
+              <thead><tr><th>Visual</th><th>Item Name</th><th>Category</th><th>Reported By</th><th>Date</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><div class="thumb-cell"><svg><use href="#icon-device"/></svg></div></td>
+                  <td style="font-weight:600; color:var(--text-dark);">MacBook Pro 14-inch</td>
+                  <td>Electronics</td>
+                  <td>Ahmed Khan</td>
+                  <td>Jan 15, 2026</td>
+                  <td><span class="badge-lost">Lost</span></td>
+                  <td><span class="status-badge" style="background:#FEF3C7; color:#D97706;">Pending</span></td>
+                  <td><div class="action-btns"><button class="btn-approve" onclick="adminAction(this,'approve')">Approve</button><button class="btn-reject" onclick="adminAction(this,'reject')">Reject</button></div></td>
+                </tr>
+                <tr>
+                  <td><div class="thumb-cell"><svg><use href="#icon-lock"/></svg></div></td>
+                  <td style="font-weight:600; color:var(--text-dark);">Toyota Car Keys</td>
+                  <td>Keys</td>
+                  <td>Sara Ali</td>
+                  <td>Jan 14, 2026</td>
+                  <td><span class="badge-found">Found</span></td>
+                  <td><span class="status-badge" style="background:#FEF3C7; color:#D97706;">Pending</span></td>
+                  <td><div class="action-btns"><button class="btn-approve" onclick="adminAction(this,'approve')">Approve</button><button class="btn-reject" onclick="adminAction(this,'reject')">Reject</button></div></td>
+                </tr>
+                <tr>
+                  <td><div class="thumb-cell"><svg><use href="#icon-wallet"/></svg></div></td>
+                  <td style="font-weight:600; color:var(--text-dark);">Black Leather Wallet</td>
+                  <td>Accessories</td>
+                  <td>Fatima Noor</td>
+                  <td>Jan 12, 2026</td>
+                  <td><span class="badge-found">Found</span></td>
+                  <td><span class="status-badge" style="background:#FEF3C7; color:#D97706;">Pending</span></td>
+                  <td><div class="action-btns"><button class="btn-approve" onclick="adminAction(this,'approve')">Approve</button><button class="btn-reject" onclick="adminAction(this,'reject')">Reject</button></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+      <div id="admin-pending" class="admin-section">
+        <div class="content-header"><h1>Pending Approvals Queue</h1></div>
+        <p style="color:var(--text-light); font-size:14px;">The central verification queues are operational.</p>
+      </div>
+      <div id="admin-all" class="admin-section">
+        <div class="content-header"><h1>Global Systems Ledger</h1></div>
+        <p style="color:var(--text-light); font-size:14px;">Unified storage infrastructure active.</p>
+      </div>
+      <div id="admin-users" class="admin-section">
+        <div class="content-header"><h1>Access Directory Controls</h1></div>
+        <p style="color:var(--text-light); font-size:14px;">Access permission tables restricted.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Structural Unified Page State Swapper
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(page => {
+    page.classList.remove('active');
+  });
+  const targetPage = document.getElementById(pageId);
+  if (targetPage) {
+    targetPage.classList.add('active');
+  }
+  
+  // Highlight active public header hyperlinks
+  document.querySelectorAll('.navbar-links a').forEach(link => {
+    if (link.getAttribute('data-page') === pageId) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+  
+  window.scrollTo(0, 0);
+}
+
+function hidePublicNav() {
+  document.getElementById('publicNav').style.display = 'none';
+}
+
+function showPublicNav() {
+  document.getElementById('publicNav').style.display = 'flex';
+}
+
+// Admin Panel Section Routing Navigation Controller
+function showAdminSection(sectionId) {
+  document.querySelectorAll('.admin-section').forEach(sec => {
+    sec.classList.remove('active');
+  });
+  document.getElementById(sectionId).classList.add('active');
+  
+  // Update sidebar active selection focus classes
+  document.querySelectorAll('.sidebar-nav a').forEach(link => {
+    if (link.getAttribute('onclick').includes(sectionId)) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+}
+
+// Modal Interactivity Interface Handlers
+function openModal(message) {
+  document.getElementById('successMsg').innerText = message;
+  document.getElementById('successModal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('successModal').style.display = 'none';
+}
+
+// Form Interactivity Execution Integrations
+document.getElementById('lostForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  openModal("Your lost item report has been logged securely into the DSU registry. Our system is crawling existing data for instant correlations.");
+  this.reset();
+  document.getElementById('lostPreview').style.display = 'none';
+});
+
+document.getElementById('foundForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  openModal("Thank you for practicing civic integrity. The found item record has been published into our public asset repository.");
+  this.reset();
+  document.getElementById('foundPreview').style.display = 'none';
+});
+
+// Native Upload Interactive Image Previews Implementation
+function setupUploadPreview(inputId, previewWrapId, previewImgId, nameId) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  input.addEventListener('change', function() {
+    if (this.files && this.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById(previewImgId).setAttribute('src', e.target.result);
+        document.getElementById(previewWrapId).style.display = 'flex';
+        document.getElementById(nameId).innerText = input.files[0].name;
+      };
+      reader.readAsDataURL(this.files[0]);
+    }
+  });
+}
+setupUploadPreview('lostImgInput', 'lostPreview', 'lostPreviewImg', 'lostPreviewName');
+setupUploadPreview('foundImgInput', 'foundPreview', 'foundPreviewImg', 'foundPreviewName');
+
+// Core Directory Live Filtering Queries Engine Logic
+function searchItems() {
+  const cat = document.getElementById('filterCat').value.toLowerCase();
+  const loc = document.getElementById('filterLoc').value.toLowerCase();
+  const status = document.getElementById('filterStatus').value.toLowerCase();
+  
+  let visibleCount = 0;
+  document.querySelectorAll('.search-item-card').forEach(card => {
+    const cardCat = card.getAttribute('data-cat').toLowerCase();
+    const cardLoc = card.getAttribute('data-loc').toLowerCase();
+    const cardStatus = card.getAttribute('data-status').toLowerCase();
+    
+    const matchesCat = !cat || cardCat.includes(cat);
+    const matchesLoc = !loc || cardLoc.includes(loc);
+    const matchesStatus = !status || cardStatus === status;
+    
+    if (matchesCat && matchesLoc && matchesStatus) {
+      card.style.display = 'flex';
+      visibleCount++;
+    } else {
+      card.style.display = 'none';
+    }
+  });
+  
+  document.getElementById('resultsCount').innerText = visibleCount + (visibleCount === 1 ? " result" : " results");
+}
+
+// Records Table Segment Filter Switching System Logic
+function filterRecords(type) {
+  document.querySelectorAll('.record-row').forEach(row => {
+    if (type === 'all' || row.getAttribute('data-type') === type) {
+      row.style.display = 'table-row';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+  
+  // Highlight active button nodes
+  const event = window.event;
+  if(event && event.target) {
+    document.querySelectorAll('.records-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+}
+
+// Secure Gatekeeping Logins Context Handlers
+function handleLogin(e) {
+  e.preventDefault();
+  // Bypass validation loop to simulate secure backend state transitions
+  showPage('page-admin');
+}
+
+// Operational Backoffice Review Action Workflows
+function adminAction(btn, action) {
+  const row = btn.closest('tr');
+  if (action === 'approve') {
+    alert("Record authorization certified successfully. Moving asset item ledger index to active public tables.");
+    row.remove();
+  } else {
+    if(confirm("Confirm irreversible deletion of this submission request?")) {
+      row.remove();
+    }
+  }
+}
+</script>
+</body>
+</html>
